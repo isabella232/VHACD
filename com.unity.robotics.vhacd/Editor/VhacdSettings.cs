@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace MeshProcess
@@ -39,11 +40,33 @@ namespace MeshProcess
         public bool OverwriteAssets { get; set; } = true;
         public string AssetSavePath { get; set; } = String.Empty;
         public string MeshSavePath { get; set; } = String.Empty;
+        public bool Convex { get; set; } = true;
         public int AssetsConverted { get; set; }
         public int TotalAssets { get; set; }
         public string CurrentFile { get; set; } = string.Empty;
         public int MeshCountChild { get; set; }
         public int MeshCountTotal { get; set; }
+        public bool ChildDefaultOff { get; set; } = true;
+        bool m_NewCollidersChild = true;
+        public bool NewCollidersChild
+        {
+            get => m_NewCollidersChild;
+            set
+            {
+                if (m_NewCollidersChild != value)
+                {
+                    m_NewCollidersChild = value;
+                    if (OnHierarchyModeChangeEvent != null)
+                    {
+                        OnHierarchyModeChangeEvent();
+                    }
+                }
+            }
+        }
+
+        // Delegate and Event for Child Object Mode change
+        public delegate void OnHierarchyModeChange();
+        public event OnHierarchyModeChange OnHierarchyModeChangeEvent;
 
         // Delegate and Event for GenerationMode change
         public delegate void OnModeChange();
